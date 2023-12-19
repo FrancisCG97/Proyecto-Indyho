@@ -30,6 +30,7 @@ import ProfileTab from '@layouts/components/profile/ProfileTab';
 import '../styles/globals.css';
 import AboutOverivew from './layouts/components/profile/AboutOverivew';
 import Form from './routes/forms';
+import UserList from './routes/forms/userList';
 import Preview from './routes/forms/preview';
 
 const Guard = ({ children }) => {
@@ -95,6 +96,7 @@ const App = () => {
                       >
                         <Route index element={<HomePage />} />
                         <Route path='/form' element={<Form />} />
+                        <Route path='/userlist' element={<UserList />} />
                         <Route path='/preview' element={<Preview />} />
                         {/* <Route path="/second-page" element={<SecondPage />} /> */}
                         <Route path="/profile" element={<UserProfile />}>

@@ -10,16 +10,15 @@ import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
-import InputAdornment from '@mui/material/InputAdornment'
 import MenuItem from '@mui/material/MenuItem'
 
 // ** Custom Component Import
 import CustomTextField from '../../@core/components/mui/text-field'
-
-// ** Icon Imports
-import Icon from '../../@core/components/icon'
+import { useNavigate } from 'react-router-dom';
 
 const FormLayoutsIcons = () => {
+
+    const [initialData, setInitialData] = useState("");
     const [option, setOption] = useState('product');
     const [charge, setCharge] = useState('charge')
     const [productName, setProductName] = useState('');
@@ -27,6 +26,7 @@ const FormLayoutsIcons = () => {
     const [provider, setProvider] = useState('');
     const [price, setPrice] = useState(0);
 
+    const navigate = useNavigate();
 
     const handleChange = (event) => {
         setOption(event.target.value);
@@ -49,13 +49,15 @@ const FormLayoutsIcons = () => {
             provider,
             price,
         });
+        navigate("/preview");
+
     };
 
 
     return (
         <Card>
             <CardHeader title='Datos solicitante' />
-            <CardContent>
+            <CardContent id="form">
 
                 <form onSubmit={e => e.preventDefault()}>
                     <Grid container spacing={5}>
@@ -98,8 +100,6 @@ const FormLayoutsIcons = () => {
                             </Grid>
 
                         </Box>
-
-
 
                         <CardHeader title='Añadir producto/servicio' />
 
@@ -193,8 +193,6 @@ const FormLayoutsIcons = () => {
                             </Box>
                         )}
 
-
-
                         {option === 'service' && (
 
                             <Box
@@ -264,13 +262,9 @@ const FormLayoutsIcons = () => {
                             </Box>
                         )}
 
-
-
-
                         <Grid item xs={12}>
 
                             <Button
-                                // sx={{ ml: "8%" }}
                                 onClick={onSubmit} type='button' variant='contained'>
                                 Enviar
                             </Button>
