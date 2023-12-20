@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import { doc, collection, getDocs, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, collection, getDocs, updateDoc, deleteDoc, onSnapshot } from "firebase/firestore";
 import { db } from '../../db/firebase-config';
 
 // ** React Imports
@@ -26,7 +26,6 @@ const Preview = () => {
 
 
   //Agregar datos
-
   useEffect(() => {
 
     const fetchData = async () => {
@@ -56,9 +55,7 @@ const Preview = () => {
   }
 
 
-
   //Actualizar datos
-
   function updateProduct(i) {
 
     const editProduct = data[i];
@@ -82,89 +79,103 @@ const Preview = () => {
 
 
   //Eliminar datos
+  function deleteProduct(j) {
+    const deleteProd = data[j];
+    const productRef = doc(db, "new-products", deleteProd.id);
 
-  const deleteProduct = async (j) => {
-    await deleteDoc(collection(db, "new-products"));
+    deleteDoc(productRef)
+
+      .then(() => {
+        console.log("Producto eliminado!");
+      })
+      .catch((error) => {
+        console.error("Se produjo un error al eliminar: ", error);
+      });
   }
 
-
-
-
-
+  
   return (
-    <Card sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <Card>
+      <Grid item xs={12} md={6}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: "100%"
+        }}
+      >
+        {data.map((newData, index) => (
 
-      {data.map((newData, index) => (
+          <TabContext key={index.toString()} value={index.toString()}>
+            <TabPanel key={index.toString()} value={index.toString()} sx={{ p: 0 }}>
 
-        <TabContext key={index.toString()} value={index.toString()}>
-          <TabPanel key={index.toString()} value={index.toString()} sx={{ p: 0 }}>
+              {editMode === index ? (
+                <Grid>
+                  <TextField
+                    id="productName"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                  />
+                  <TextField
+                    id="description"
+                    value={newDesc}
+                    onChange={(e) => setNewDesc(e.target.value)}
+                  />
+                  <TextField
+                    id="provider"
+                    value={newProvider}
+                    onChange={(e) => setNewProvider(e.target.value)}
+                  />
+                  <TextField
+                    id="price"
+                    value={newPrice}
+                    onChange={(e) => setNewPrice(e.target.value)}
+                  />
+                </Grid>
 
-            {editMode === index ? (
-              <Grid>
-                <TextField
-                  id="productName"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                />
-                <TextField
-                  id="description"
-                  value={newDesc}
-                  onChange={(e) => setNewDesc(e.target.value)}
-                />
-                <TextField
-                  id="provider"
-                  value={newProvider}
-                  onChange={(e) => setNewProvider(e.target.value)}
-                />
-                <TextField
-                  id="price"
-                  value={newPrice}
-                  onChange={(e) => setNewPrice(e.target.value)}
-                />
-              </Grid>
+              ) : (
 
-            ) : (
+                <Grid>
+                  <Typography>{newData.productName}</Typography>
+                  <Typography>{newData.description}</Typography>
+                  <Typography sx={{ mb: 4, color: "text.secondary" }}>{newData.provider}</Typography>
+                  <Typography sx={{ mb: 4, color: "text.secondary" }}>{newData.price}</Typography>
+                </Grid>
+              )}
 
-              <Grid>
-                <Typography>{newData.productName}</Typography>
-                <Typography>{newData.description}</Typography>
-                <Typography sx={{ mb: 4, color: "text.secondary" }}>{newData.provider}</Typography>
-                <Typography sx={{ mb: 4, color: "text.secondary" }}>{newData.price}</Typography>
-              </Grid>
-            )}
+              <Button
+                variant="contained"
+                sx={{ mb: 4 }}
+                onClick={() => {
+                  if (editMode === index) {
+                    updateProduct(index);
+                  } else {
+                    setEditMode(index);
+                    setNewName(newData.productName);
+                    setNewDesc(newData.description);
+                    setNewProvider(newData.provider);
+                    setNewPrice(newData.price);
+                  }
+                }}
+              >
 
-            <Button
-              variant="contained"
-              sx={{ mb: 4 }}
-              onClick={() => {
-                if (editMode === index) {
-                  updateProduct(index);
-                } else {
-                  setEditMode(index);
-                  setNewName(newData.productName);
-                  setNewDesc(newData.description);
-                  setNewProvider(newData.provider);
-                  setNewPrice(newData.price);
-                }
-              }}
-            >
+                {editMode === index ? "Guardar" : "Editar"}
 
-              {editMode === index ? "Guardar" : "Editar"}
+              </Button>
 
-            </Button>
+              <Button
+                variant="contained"
+                sx={{ mb: 4 }}
+                onClick={() => deleteProduct(index)}
+              >
+                Eliminar producto
+              </Button>
 
-            <Button
-              variant="contained"
-              sx={{ mb: 4 }}
-              onClick={deleteProduct}
-            >
-              Eliminar producto
-            </Button>
+            </TabPanel>
+          </TabContext>
 
-          </TabPanel>
-        </TabContext>
-
-      ))}
+        ))}
+      </Grid>
 
     </Card >
   )

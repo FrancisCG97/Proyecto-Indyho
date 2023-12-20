@@ -1,6 +1,9 @@
 // ** React Imports
+import { useCallback, useEffect, useState } from 'react';
+
 // ** MUI Imports
 import Box from '@mui/material/Box';
+
 // ** Custom Table Components Imports
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -13,9 +16,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import { DataGrid } from '@mui/x-data-grid';
-import { useCallback, useEffect, useState } from 'react';
+
 // ** Store Imports
 // import { useDispatch, useSelector } from 'react-redux';
+
 // ** Next Imports
 import { Link } from 'react-router-dom';
 
@@ -23,66 +27,69 @@ import { Link } from 'react-router-dom';
 // import { deleteUser, fetchData } from 'src/store/apps/user';
 // import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer';
 import CardStatsHorizontalWithDetails from '@core/components/card-statistics/card-stats-horizontal-with-details';
+
 // ** Icon Imports
 import Icon from '@core/components/icon';
 import CustomAvatar from '@core/components/mui/avatar';
+
 // ** Custom Components Imports
 import CustomChip from '@core/components/mui/chip';
 import CustomTextField from '@core/components/mui/text-field';
+
 // ** Utils Import
 import { getInitials } from '@core/utils/get-initials';
 
-// const TableHeader = (props) => {
-//   // ** Props
-//   const { handleFilter, toggle, value } = props;
+const TableHeader = (props) => {
+  // ** Props
+  const { handleFilter, toggle, value } = props;
 
-//   return (
-//     <Box
-//       sx={{
-//         py: 4,
-//         px: 6,
-//         rowGap: 2,
-//         columnGap: 4,
-//         display: 'flex',
-//         flexWrap: 'wrap',
-//         alignItems: 'center',
-//         justifyContent: 'space-between',
-//       }}
-//     >
-//       <Button
-//         color="secondary"
-//         variant="tonal"
-//         startIcon={<Icon icon="tabler:upload" />}
-//       >
-//         Export
-//       </Button>
-//       <Box
-//         sx={{
-//           rowGap: 2,
-//           display: 'flex',
-//           flexWrap: 'wrap',
-//           alignItems: 'center',
-//         }}
-//       >
-//         <CustomTextField
-//           value={value}
-//           sx={{ mr: 4 }}
-//           placeholder="Search User"
-//           onChange={(e) => handleFilter(e.target.value)}
-//         />
+  return (
+    <Box
+      sx={{
+        py: 4,
+        px: 6,
+        rowGap: 2,
+        columnGap: 4,
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}
+    >
+      <Button
+        color="secondary"
+        variant="tonal"
+        startIcon={<Icon icon="tabler:upload" />}
+      >
+        Export
+      </Button>
+      <Box
+        sx={{
+          rowGap: 2,
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+        }}
+      >
+        <CustomTextField
+          value={value}
+          sx={{ mr: 4 }}
+          placeholder="Search User"
+          onChange={(e) => handleFilter(e.target.value)}
+        />
 
-//         <Button
-//           onClick={toggle}
-//           variant="contained"
-//           sx={{ '& svg': { mr: 2 } }}
-//         >
-//           <Icon fontSize="1.125rem" icon="tabler:plus" />
-//           Add New User
-//         </Button>
-//       </Box>
-//     </Box>
-//   );
-// };
+        <Button
+          onClick={toggle}
+          variant="contained"
+          sx={{ '& svg': { mr: 2 } }}
+        >
+          <Icon fontSize="1.125rem" icon="tabler:plus" />
+          Add New User
+        </Button>
+      </Box>
+    </Box>
+  );
+};
 
 // ** renders client column
 const userRoleObj = {
@@ -1199,7 +1206,7 @@ const datausers = {
   ],
 };
 
-const UserList = () => {
+export const UserList = () => {
   // ** State
   const [role, setRole] = useState('');
   const [plan, setPlan] = useState('');
@@ -1319,11 +1326,11 @@ const UserList = () => {
             </Grid>
           </CardContent>
           <Divider sx={{ m: '0 !important' }} />
-          {/* <TableHeader
+          <TableHeader
             value={value}
             handleFilter={handleFilter}
             toggle={toggleAddUserDrawer}
-          /> */}
+          />
           <DataGrid
             autoHeight
             rowHeight={62}
