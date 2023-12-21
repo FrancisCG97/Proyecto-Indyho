@@ -56,3 +56,6 @@ export const useBgColor = () => {
     },
   };
 };
+
+
+export default useBgColor;

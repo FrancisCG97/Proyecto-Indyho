@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // ** React Imports
 import { useCallback, useEffect, useState } from 'react';
 
@@ -56,13 +57,32 @@ const TableHeader = (props) => {
         justifyContent: 'space-between',
       }}
     >
-      <Button
-        color="secondary"
-        variant="tonal"
-        startIcon={<Icon icon="tabler:upload" />}
+      <Box
+        sx={{
+          rowGap: 2,
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+        }}
       >
-        Export
-      </Button>
+        <Button
+          color="secondary"
+          variant="tonal"
+          startIcon={<Icon icon="tabler:upload" />}
+          sx={{ mr: 4 }}
+        >
+          Export
+        </Button>
+
+        <Button
+          variant="contained"
+          sx={{ '& svg': { mr: 2 } }}
+        >
+          <Icon fontSize="1.125rem" icon="material-symbols:refresh" />
+          Limpiar filtros
+        </Button>
+      </Box>
+
       <Box
         sx={{
           rowGap: 2,
@@ -81,10 +101,8 @@ const TableHeader = (props) => {
         <Button
           onClick={toggle}
           variant="contained"
-          sx={{ '& svg': { mr: 2 } }}
         >
-          <Icon fontSize="1.125rem" icon="tabler:plus" />
-          Add New User
+          <Icon fontSize="1.125rem" icon="ion:search" />
         </Button>
       </Box>
     </Box>
@@ -175,19 +193,19 @@ const RowOptions = ({ id }) => {
         <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
-          to="/apps/user/view/account"
+          to="/preview"
           onClick={handleRowOptionsClose}
         >
           <Icon icon="tabler:eye" fontSize={20} />
-          View
+          Ver más
         </MenuItem>
         <MenuItem onClick={handleRowOptionsClose} sx={{ '& svg': { mr: 2 } }}>
           <Icon icon="tabler:edit" fontSize={20} />
-          Edit
+          Editar
         </MenuItem>
         <MenuItem onClick={handleDelete} sx={{ '& svg': { mr: 2 } }}>
           <Icon icon="tabler:trash" fontSize={20} />
-          Delete
+          Eliminar
         </MenuItem>
       </Menu>
     </>
@@ -199,7 +217,7 @@ const columns = [
     flex: 0.25,
     minWidth: 280,
     field: 'fullName',
-    headerName: 'User',
+    headerName: 'Producto o servicio',
     renderCell: ({ row }) => {
       const { fullName, email } = row;
 
@@ -224,7 +242,7 @@ const columns = [
                 '&:hover': { color: 'primary.main' },
               }}
             >
-              {fullName}
+              Producto/Servicio
             </Typography>
             <Typography noWrap variant="body2" sx={{ color: 'text.disabled' }}>
               {email}
@@ -238,7 +256,7 @@ const columns = [
     flex: 0.15,
     field: 'role',
     minWidth: 170,
-    headerName: 'Role',
+    headerName: 'Precio',
     renderCell: ({ row }) => {
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -253,42 +271,9 @@ const columns = [
             noWrap
             sx={{ color: 'text.secondary', textTransform: 'capitalize' }}
           >
-            {row.role}
+            $$$$
           </Typography>
         </Box>
-      );
-    },
-  },
-  {
-    flex: 0.15,
-    minWidth: 120,
-    headerName: 'Plan',
-    field: 'currentPlan',
-    renderCell: ({ row }) => {
-      return (
-        <Typography
-          noWrap
-          sx={{
-            fontWeight: 500,
-            color: 'text.secondary',
-            textTransform: 'capitalize',
-          }}
-        >
-          {row.currentPlan}
-        </Typography>
-      );
-    },
-  },
-  {
-    flex: 0.15,
-    minWidth: 190,
-    field: 'billing',
-    headerName: 'Billing',
-    renderCell: ({ row }) => {
-      return (
-        <Typography noWrap sx={{ color: 'text.secondary' }}>
-          {row.billing}
-        </Typography>
       );
     },
   },
@@ -296,7 +281,7 @@ const columns = [
     flex: 0.1,
     minWidth: 110,
     field: 'status',
-    headerName: 'Status',
+    headerName: 'Estado',
     renderCell: ({ row }) => {
       return (
         <CustomChip
@@ -317,169 +302,6 @@ const columns = [
     field: 'actions',
     headerName: 'Actions',
     renderCell: ({ row }) => <RowOptions id={row.id} />,
-  },
-];
-
-const cardStatsData = {
-  statsSquare: [
-    {
-      stats: '97.8k',
-      title: 'Orders',
-      avatarColor: 'error',
-      icon: 'tabler:briefcase',
-    },
-    {
-      stats: '3.4k',
-      title: 'Review',
-      avatarColor: 'success',
-      icon: 'tabler:message-dots',
-    },
-  ],
-  statsHorizontal: [
-    {
-      stats: '86%',
-      icon: 'tabler:cpu',
-      title: 'CPU Usage',
-    },
-    {
-      stats: '1.24gb',
-      icon: 'tabler:server',
-      title: 'Memory Usage',
-      avatarColor: 'success',
-    },
-    {
-      stats: '0.2%',
-      avatarColor: 'error',
-      title: 'Downtime Ratio',
-      icon: 'tabler:chart-pie-2',
-    },
-    {
-      stats: '128',
-      title: 'Issues Found',
-      avatarColor: 'warning',
-      icon: 'tabler:alert-octagon',
-    },
-  ],
-  statsVertical: [
-    {
-      stats: '1.28k',
-      chipColor: 'error',
-      chipText: '-12.2%',
-      avatarColor: 'error',
-      title: 'Total Profit',
-      subtitle: 'Last week',
-      avatarIcon: 'tabler:credit-card',
-    },
-    {
-      stats: '24.67k',
-      chipText: '+25.7%',
-      title: 'Total Sales',
-      chipColor: 'success',
-      subtitle: 'Last week',
-      avatarColor: 'success',
-      avatarIcon: 'tabler:credit-card',
-    },
-  ],
-  statsWithAreaChart: [
-    {
-      stats: '92.6k',
-      avatarIcon: 'tabler:users',
-      title: 'Subscribers Gained',
-      chartSeries: [{ data: [40, 4, 58, 12, 35, 10, 84] }],
-    },
-    {
-      stats: '36.5%',
-      chartColor: 'error',
-      avatarColor: 'error',
-      title: 'Quarterly Sales',
-      avatarIcon: 'tabler:shopping-cart',
-      chartSeries: [{ data: [44, 75, 24, 57, 6, 84] }],
-    },
-    {
-      stats: '97.5k',
-      chartColor: 'warning',
-      avatarColor: 'warning',
-      title: 'Orders Received',
-      avatarIcon: 'tabler:package',
-      chartSeries: [{ data: [30, 84, 11, 76, 0, 49, 9] }],
-    },
-    {
-      stats: '91.8k',
-      chartColor: 'success',
-      avatarColor: 'success',
-      title: 'Revenue Generated',
-      avatarIcon: 'tabler:credit-card',
-      chartSeries: [{ data: [6, 35, 25, 61, 32, 84, 70] }],
-    },
-  ],
-  statsHorizontalWithDetails: [
-    {
-      stats: '21,459',
-      title: 'Session',
-      trendDiff: '+29',
-      icon: 'tabler:user',
-      subtitle: 'Total Users',
-    },
-    {
-      stats: '4,567',
-      trendDiff: '+18',
-      title: 'Paid Users',
-      avatarColor: 'error',
-      icon: 'tabler:user-plus',
-      subtitle: 'Last week analytics',
-    },
-    {
-      stats: '19,860',
-      trendDiff: '-14',
-      trend: 'negative',
-      title: 'Active Users',
-      avatarColor: 'success',
-      icon: 'tabler:user-check',
-      subtitle: 'Last week analytics',
-    },
-    {
-      stats: '237',
-      trendDiff: '+42',
-      title: 'Pending Users',
-      avatarColor: 'warning',
-      icon: 'tabler:user-exclamation',
-      subtitle: 'Last week analytics',
-    },
-  ],
-};
-
-const datacards = [
-  {
-    stats: '21,459',
-    title: 'Session',
-    trendDiff: '+29',
-    icon: 'tabler:user',
-    subtitle: 'Total Users',
-  },
-  {
-    stats: '4,567',
-    trendDiff: '+18',
-    title: 'Paid Users',
-    avatarColor: 'error',
-    icon: 'tabler:user-plus',
-    subtitle: 'Last week analytics',
-  },
-  {
-    stats: '19,860',
-    trendDiff: '-14',
-    trend: 'negative',
-    title: 'Active Users',
-    avatarColor: 'success',
-    icon: 'tabler:user-check',
-    subtitle: 'Last week analytics',
-  },
-  {
-    stats: '237',
-    trendDiff: '+42',
-    title: 'Pending Users',
-    avatarColor: 'warning',
-    icon: 'tabler:user-exclamation',
-    subtitle: 'Last week analytics',
   },
 ];
 
@@ -1251,7 +1073,7 @@ export const UserList = () => {
 
   return (
     <Grid container spacing={6.5}>
-      <Grid item xs={12}>
+      {/* <Grid item xs={12}>
         {datacards && (
           <Grid container spacing={6}>
             {datacards.map((item, index) => {
@@ -1263,50 +1085,48 @@ export const UserList = () => {
             })}
           </Grid>
         )}
-      </Grid>
+      </Grid> */}
       <Grid item xs={12}>
         <Card>
-          <CardHeader title="Search Filters" />
+          <CardHeader title="Filtrar búsqueda" />
           <CardContent>
             <Grid container spacing={6}>
               <Grid item sm={4} xs={12}>
                 <CustomTextField
                   select
                   fullWidth
-                  defaultValue="Select Role"
+                  defaultValue="Producto/Servicio"
                   SelectProps={{
                     value: role,
                     displayEmpty: true,
                     onChange: (e) => handleRoleChange(e),
                   }}
                 >
-                  <MenuItem value="">Select Role</MenuItem>
-                  <MenuItem value="admin">Admin</MenuItem>
-                  <MenuItem value="author">Author</MenuItem>
-                  <MenuItem value="editor">Editor</MenuItem>
-                  <MenuItem value="maintainer">Maintainer</MenuItem>
-                  <MenuItem value="subscriber">Subscriber</MenuItem>
+                  <MenuItem value=""> Seleccionar </MenuItem>
+                  <MenuItem value="product"> Producto </MenuItem>
+                  <MenuItem value="service"> Servicio </MenuItem>
                 </CustomTextField>
               </Grid>
               <Grid item sm={4} xs={12}>
                 <CustomTextField
                   select
                   fullWidth
-                  defaultValue="Select Plan"
+                  defaultValue="Cargo del solicitante"
                   SelectProps={{
                     value: plan,
                     displayEmpty: true,
                     onChange: (e) => handlePlanChange(e),
                   }}
                 >
-                  <MenuItem value="">Select Plan</MenuItem>
-                  <MenuItem value="basic">Basic</MenuItem>
-                  <MenuItem value="company">Company</MenuItem>
-                  <MenuItem value="enterprise">Enterprise</MenuItem>
-                  <MenuItem value="team">Team</MenuItem>
+                  <MenuItem value=""> Seleccionar </MenuItem>
+                  <MenuItem value="encargadoCompras"> Encargado de compras </MenuItem>
+                <MenuItem value="finanzas">Encargado de finanzas </MenuItem>
+                <MenuItem value="subGerente">Sub gerente </MenuItem>
+                <MenuItem value="gerenteArea">Gerente compras </MenuItem>
+                <MenuItem value="gerenteGeneral">Gerente general </MenuItem>
                 </CustomTextField>
               </Grid>
-              <Grid item sm={4} xs={12}>
+              {/* <Grid item sm={4} xs={12}>
                 <CustomTextField
                   select
                   fullWidth
@@ -1322,7 +1142,7 @@ export const UserList = () => {
                   <MenuItem value="active">Active</MenuItem>
                   <MenuItem value="inactive">Inactive</MenuItem>
                 </CustomTextField>
-              </Grid>
+              </Grid> */}
             </Grid>
           </CardContent>
           <Divider sx={{ m: '0 !important' }} />
