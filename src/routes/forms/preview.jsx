@@ -131,7 +131,6 @@ const TableHeader = (props) => {
 };
 
 
-
 const Preview = () => {
 
   const [data, setData] = useState([]);
@@ -146,11 +145,6 @@ const Preview = () => {
   console.log(provider);
 
   const [editMode, setEditMode] = useState(null);
-  const [newName, setNewName] = useState("");
-  const [newDesc, setNewDesc] = useState("");
-  const [newProvider, setNewProvider] = useState("");
-  const [newPrice, setNewPrice] = useState("");
-
   // ** renders client column
   const renderClient = (row) => {
     if (row.avatar) {
@@ -228,7 +222,7 @@ const Preview = () => {
           </MenuItem>
           <MenuItem sx={{ '& svg': { mr: 2 } }}>
             <Icon icon="tabler:edit" fontSize={20} />
-            <DialogAddAddress data={data} index={id}/>
+            <DialogAddAddress data={data} index={id} />
           </MenuItem>
           <MenuItem onClick={(e) => deleteProduct(e.target.value)} sx={{ '& svg': { mr: 2 } }}>
             <Icon icon="tabler:trash" fontSize={20} />
@@ -259,7 +253,7 @@ const Preview = () => {
               <Box sx={{ width: "100%", display: 'flex', flexDirection: "column" }}>
                 {datausers.users.map((index) => (
                   <TabContext key={index.toString()} value={index.toString()}>
-                  <TabPanel key={index.toString()} value={index.toString()} >
+                    <TabPanel key={index.toString()} value={index.toString()} >
                       {editMode === index ? (
                         <>
                           <Typography
@@ -302,7 +296,7 @@ const Preview = () => {
               <Box sx={{ width: "100%", display: 'flex', flexDirection: "column" }}>
                 {datausers.users.map((index) => (
                   <TabContext key={index.toString()} value={index.toString()}>
-                  <TabPanel key={index.toString()} value={index.toString()} >
+                    <TabPanel key={index.toString()} value={index.toString()} >
                       {editMode === index ? (
                         <>
                           <Typography noWrap variant="body2" sx={{ color: 'text.disabled' }}>
@@ -340,7 +334,7 @@ const Preview = () => {
               <Box sx={{ width: "100%", display: 'flex', flexDirection: "column" }}>
                 {datausers.users.map((index) => (
                   <TabContext key={index.toString()} value={index.toString()}>
-                  <TabPanel key={index.toString()} value={index.toString()} >
+                    <TabPanel key={index.toString()} value={index.toString()} >
                       {editMode === index ? (
                         <>
                           <Typography noWrap variant="body2" sx={{ color: 'text.disabled' }}>
@@ -419,8 +413,6 @@ const Preview = () => {
     ]
   }
 
-
-
   //Agregar datos
   useEffect(() => {
 
@@ -454,30 +446,6 @@ const Preview = () => {
   if (!data.length) {
     return null;
   }
-
-
-  //Actualizar datos
-  function updateProduct(i) {
-
-    const editProduct = data[i];
-    const productRef = doc(db, "new-products", editProduct.id);
-
-    updateDoc(productRef, {
-      productName: newName,
-      description: newDesc,
-      provider: newProvider,
-      price: newPrice,
-    })
-
-      .then(() => {
-        console.log("Producto actualizado!");
-        setEditMode(null);
-      })
-      .catch((error) => {
-        console.error("Se produjo un error al actualizar: ", error);
-      });
-  }
-
 
   //Eliminar datos
   function deleteProduct(j) {

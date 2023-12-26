@@ -139,6 +139,7 @@ const FormLayoutsIcons = () => {
               <Grid item xs={12} sm={6}>
                 <CustomTextField
                   fullWidth
+                  type='number'
                   multiline
                   label="Precio"
                   placeholder="$"
@@ -180,6 +181,7 @@ const FormLayoutsIcons = () => {
                 <CustomTextField
                   fullWidth
                   multiline
+                  type='number'
                   label="Precio"
                   placeholder="$"
                   onChange={(e) => setPrice(e.target.value)}
