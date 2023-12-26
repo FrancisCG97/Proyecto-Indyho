@@ -50,11 +50,18 @@ import { getInitials } from '@core/utils/get-initials';
 
 // ** Hooks
 import useBgColor from '../../hooks/useBgColor'
+import { useNavigate } from "react-router-dom";
 
 
 const TableHeader = (props) => {
   // ** Props
   const { handleFilter, toggle, value } = props;
+
+  const navigate = useNavigate();
+
+  const addProd = () => {
+    navigate("/form");
+  }
 
   return (
     // Tabla
@@ -112,10 +119,11 @@ const TableHeader = (props) => {
         />
 
         <Button
-          onClick={toggle}
           variant="contained"
+          onClick={addProd}
         >
-          <Icon fontSize="1.125rem" icon="ion:search" />
+          <Icon fontSize="1.125rem" icon="ic:baseline-add" />
+          Añadir producto
         </Button>
       </Box>
     </Box>
@@ -144,15 +152,6 @@ const Preview = () => {
   const [newPrice, setNewPrice] = useState("");
 
   // ** renders client column
-  const userRoleObj = {
-    admin: { icon: 'tabler:device-laptop', color: 'secondary' },
-    author: { icon: 'tabler:circle-check', color: 'success' },
-    editor: { icon: 'tabler:edit', color: 'info' },
-    maintainer: { icon: 'tabler:chart-pie-2', color: 'primary' },
-    subscriber: { icon: 'tabler:user', color: 'warning' },
-  };
-
-  // ** renders client column
   const renderClient = (row) => {
     if (row.avatar) {
       return (
@@ -171,7 +170,7 @@ const Preview = () => {
             fontSize: (theme) => theme.typography.body1.fontSize,
           }}
         >
-          {getInitials(row.fullName ? row.fullName : 'John Doe')}
+          {getInitials(row.productName ? row.productName : "")}
         </CustomAvatar>
       );
     }
@@ -227,14 +226,11 @@ const Preview = () => {
             <Icon icon="tabler:eye" fontSize={20} />
             Ver más
           </MenuItem>
-          <Button variant='contained' onClick={() => setShow(true)}>
-            Show
-          </Button>
           <MenuItem sx={{ '& svg': { mr: 2 } }}>
             <Icon icon="tabler:edit" fontSize={20} />
-            Editar
+            <DialogAddAddress data={data} index={id}/>
           </MenuItem>
-          <MenuItem onClick={handleDelete} sx={{ '& svg': { mr: 2 } }}>
+          <MenuItem onClick={(e) => deleteProduct(e.target.value)} sx={{ '& svg': { mr: 2 } }}>
             <Icon icon="tabler:trash" fontSize={20} />
             Eliminar
           </MenuItem>
@@ -247,90 +243,158 @@ const Preview = () => {
   const columns = [
     {
       flex: 0.25,
-      minWidth: 280,
-      field: 'fullName',
+      width: "fit-content",
+      field: 'product or service',
       headerName: 'Producto o servicio',
+      display: "flex",
+      justifyContent: "center",
       renderCell: ({ row }) => {
 
-        const { fullName, email } = row;
+        const { productName } = row;
 
         return (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {renderClient(row)}
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                flexDirection: 'column',
-              }}
-            >
-              <Typography
-                noWrap
-                // component={Link}
-                // href="/apps/user/view/account"
-                sx={{
-                  fontWeight: 500,
-                  textDecoration: 'none',
-                  color: 'text.secondary',
-                  '&:hover': { color: 'primary.main' },
-                }}
-              >
-                {name}
-              </Typography>
-              <Typography noWrap variant="body2" sx={{ color: 'text.disabled' }}>
-                {description}
-              </Typography>
+          <Box fullWidth sx={{ display: 'flex' }}>
+            <Box fullWidth sx={{ display: 'flex', alignItems: "center", justifyContent: "center" }}>
+              {renderClient(row)}
+              <Box sx={{ width: "100%", display: 'flex', flexDirection: "column" }}>
+                {datausers.users.map((index) => (
+                  <TabContext key={index.toString()} value={index.toString()}>
+                  <TabPanel key={index.toString()} value={index.toString()} >
+                      {editMode === index ? (
+                        <>
+                          <Typography
+                            sx={{
+                              fontWeight: 500,
+                              textDecoration: 'none',
+                              color: 'text.secondary',
+                              '&:hover': { color: 'primary.main' },
+                            }}
+                          >
+                            {productName}
+                          </Typography>
+                        </>
+                      ) : (
+                        <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                          <Typography sx={{ mr: "10px" }}>{productName}</Typography>
+                        </Grid>
+                      )}
+                    </TabPanel>
+                  </TabContext>
+                ))}
+              </Box>
             </Box>
           </Box>
         );
       },
     },
     {
-      flex: 0.15,
-      field: 'price',
-      minWidth: 170,
-      headerName: 'Precio',
+      flex: 0.25,
+      width: "fit-content",
+      field: 'description',
+      headerName: 'Descripción',
       renderCell: ({ row }) => {
+
+        const { description } = row;
+
         return (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <CustomAvatar
-              skin="light"
-              sx={{ mr: 4, width: 30, height: 30 }}
-              color={userRoleObj[row.role] || 'primary'}
-            >
-              <Icon icon={userRoleObj[row.role]} />
-            </CustomAvatar>
-            <Typography
-              noWrap
-              sx={{ color: 'text.secondary', textTransform: 'capitalize' }}
-            >
-              {price}
-            </Typography>
+          <Box fullWidth sx={{ display: 'flex' }}>
+            <Box fullWidth sx={{ display: 'flex', alignItems: "center", justifyContent: "center" }}>
+              <Box sx={{ width: "100%", display: 'flex', flexDirection: "column" }}>
+                {datausers.users.map((index) => (
+                  <TabContext key={index.toString()} value={index.toString()}>
+                  <TabPanel key={index.toString()} value={index.toString()} >
+                      {editMode === index ? (
+                        <>
+                          <Typography noWrap variant="body2" sx={{ color: 'text.disabled' }}>
+                            {description}
+                          </Typography>
+                        </>
+                      ) : (
+                        <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                          <Typography sx={{ mr: "10px" }}>{description}</Typography>
+                        </Grid>
+                      )}
+                    </TabPanel>
+                  </TabContext>
+                ))}
+              </Box>
+            </Box>
           </Box>
         );
       },
     },
     {
-      flex: 0.15,
-      field: 'provider',
-      minWidth: 170,
-      headerName: 'Proveedor',
+      flex: 0.25,
+      width: "fit-content",
+      field: 'Price',
+      headerName: 'Precio',
+      display: "flex",
+      justifyContent: "center",
       renderCell: ({ row }) => {
+
+        const { price } = row;
+
         return (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <CustomAvatar
-              skin="light"
-              sx={{ mr: 4, width: 30, height: 30 }}
-              color={userRoleObj[row.role] || 'primary'}
-            >
-              <Icon icon={userRoleObj[row.role]} />
-            </CustomAvatar>
-            <Typography
-              noWrap
-              sx={{ color: 'text.secondary', textTransform: 'capitalize' }}
-            >
-              {provider}
-            </Typography>
+          <Box fullWidth sx={{ display: 'flex' }}>
+            <Box fullWidth sx={{ display: 'flex', alignItems: "center", justifyContent: "center" }}>
+              <Box sx={{ width: "100%", display: 'flex', flexDirection: "column" }}>
+                {datausers.users.map((index) => (
+                  <TabContext key={index.toString()} value={index.toString()}>
+                  <TabPanel key={index.toString()} value={index.toString()} >
+                      {editMode === index ? (
+                        <>
+                          <Typography noWrap variant="body2" sx={{ color: 'text.disabled' }}>
+                            {price}
+                          </Typography>
+                        </>
+                      ) : (
+                        <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                          <Typography sx={{ mb: 4, mr: "10px", color: "text.secondary" }}>{price}</Typography>
+                        </Grid>
+                      )}
+                    </TabPanel>
+                  </TabContext>
+                ))}
+              </Box>
+            </Box>
+          </Box>
+        );
+      },
+    },
+    {
+      flex: 0.25,
+      width: "fit-content",
+      field: 'provider',
+      headerName: 'Proveedor',
+      display: "flex",
+      justifyContent: "center",
+      renderCell: ({ row }) => {
+
+        const { provider } = row;
+
+        return (
+          <Box fullWidth sx={{ display: 'flex' }}>
+            <Box fullWidth sx={{ display: 'flex', alignItems: "center", justifyContent: "center" }}>
+              <Box sx={{ width: "100%", display: 'flex', flexDirection: "column" }}>
+                {datausers.users.map((index) => (
+                  <TabContext key={index.toString()} value={index.toString()}>
+                    <TabPanel key={index.toString()} value={index.toString()} >
+                      {editMode === index ? (
+                        <>
+                          <Typography noWrap variant="body2" sx={{ color: 'text.disabled' }}>
+                            {provider}
+                          </Typography>
+                        </>
+                      ) : (
+                        <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                          <Typography sx={{ mb: 4, mr: "10px", color: "text.secondary" }}>{provider}</Typography>
+                        </Grid>
+                      )}
+                    </TabPanel>
+                  </TabContext>
+                ))}
+              </Box>
+            </Box>
           </Box>
         );
       },
@@ -339,21 +403,16 @@ const Preview = () => {
       flex: 0.1,
       minWidth: 100,
       sortable: false,
-      field: 'actions',
-      headerName: 'Actions',
       renderCell: ({ row }) => <RowOptions id={row.id} />,
     },
-  ];
-
-
-
-
+  ]
 
   const datausers = {
     users: [
       {
         id: 1,
         productName: data.productName,
+        description: data.description,
         price: data.price,
         provider: data.provider,
       },
@@ -485,92 +544,16 @@ const Preview = () => {
           <DataGrid
             autoHeight
             rowHeight={62}
-            rows={datausers.users}
+            rows={data}
             getRowId={(row) => row.id}
             columns={columns}
             disableRowSelectionOnClick
             pageSizeOptions={[10, 25, 50]} />
-        </Card>
-        <Card>
-          <Grid item xs={12} md={6}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "100%"
-            }}
-          >
-            {data.map((newData, index) => (
-
-              <TabContext key={index.toString()} value={index.toString()}>
-                <TabPanel key={index.toString()} value={index.toString()} sx={{ p: 0 }}>
-
-                  {editMode === index ? (
-                    <Grid>
-                      <TextField
-                        id="productName"
-                        value={newName}
-                        onChange={(e) => setNewName(e.target.value)} />
-                      <TextField
-                        id="description"
-                        value={newDesc}
-                        onChange={(e) => setNewDesc(e.target.value)} />
-                      <TextField
-                        id="provider"
-                        value={newProvider}
-                        onChange={(e) => setNewProvider(e.target.value)} />
-                      <TextField
-                        id="price"
-                        value={newPrice}
-                        onChange={(e) => setNewPrice(e.target.value)} />
-                    </Grid>
-
-                  ) : (
-
-                    <Grid>
-                      <Typography>{newData.productName}</Typography>
-                      <Typography>{newData.description}</Typography>
-                      <Typography sx={{ mb: 4, color: "text.secondary" }}>{newData.provider}</Typography>
-                      <Typography sx={{ mb: 4, color: "text.secondary" }}>{newData.price}</Typography>
-                    </Grid>
-                  )}
-
-                  <Button
-                    variant="contained"
-                    sx={{ mb: 4 }}
-                    onClick={() => {
-                      if (editMode === index) {
-                        updateProduct(index);
-                      } else {
-                        setEditMode(index);
-                        setNewName(newData.productName);
-                        setNewDesc(newData.description);
-                        setNewProvider(newData.provider);
-                        setNewPrice(newData.price);
-                      }
-                    }}
-                  >
-
-                    {editMode === index ? "Guardar" : "Editar"}
-
-                  </Button>
-                  <Button
-                    variant="contained"
-                    sx={{ mb: 4 }}
-                    onClick={() => deleteProduct(index)}
-                  >
-                    Eliminar producto
-                  </Button>
-
-                </TabPanel>
-              </TabContext>
-
-            ))}
-          </Grid>
 
         </Card>
       </Grid>
     </>
+
   )
 }
 
