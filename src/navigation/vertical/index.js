@@ -7,17 +7,12 @@ const navigation = () => {
     },
     {
       icon: 'tabler:user',
-      title: 'Profile',
+      title: 'Perfil',
       path: '/profile',
     },
     {
-      // icon: 'tabler:user',
-      title: 'New product',
-      path: '/form',
-    },
-    {
-      // icon: 'tabler:user',
-      title: 'New Preview',
+      icon: 'circum:view-table',
+      title: 'Productos',
       path: '/preview',
     },
     // {

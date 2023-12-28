@@ -1,17 +1,11 @@
 import { Typography } from '@mui/material';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
-import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
- 
-// ** Icon Imports
-import Icon from '../../@core/components/icon';
-// ** Custom Component Import
+
 import CustomTextField from '../../@core/components/mui/text-field';
 import { addNewProduct } from './newProduct';
 import { useNavigate } from 'react-router-dom';
@@ -89,7 +83,6 @@ const FormLayoutsIcons = () => {
               />
             </Grid>
           </Grid>
- 
           <Typography variant="h5" marginY={5}>
             Añadir producto/servicio
           </Typography>
@@ -108,6 +101,7 @@ const FormLayoutsIcons = () => {
               </CustomTextField>
             </Grid>
           </Grid>
+
           {option === 'product' && (
             <Grid container spacing={5}>
               <Grid item xs={12} sm={6}>
@@ -126,7 +120,6 @@ const FormLayoutsIcons = () => {
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </Grid>
- 
               <Grid item xs={12} sm={6}>
                 <CustomTextField
                   fullWidth
@@ -135,7 +128,6 @@ const FormLayoutsIcons = () => {
                   onChange={(e) => setProvider(e.target.value)}
                 />
               </Grid>
- 
               <Grid item xs={12} sm={6}>
                 <CustomTextField
                   fullWidth
@@ -167,7 +159,6 @@ const FormLayoutsIcons = () => {
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </Grid>
- 
               <Grid item xs={12} sm={6}>
                 <CustomTextField
                   fullWidth
@@ -176,7 +167,6 @@ const FormLayoutsIcons = () => {
                   onChange={(e) => setProvider(e.target.value)}
                 />
               </Grid>
- 
               <Grid item xs={12} sm={6}>
                 <CustomTextField
                   fullWidth

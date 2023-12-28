@@ -1,60 +1,41 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import { doc, collection, getDocs, updateDoc, deleteDoc, onSnapshot } from "firebase/firestore";
+import { doc, collection, getDocs, deleteDoc, orderBy, query } from "firebase/firestore";
 import { db } from '../../db/firebase-config';
 
-// ** React Imports
-import { useEffect, useState, forwardRef } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
 import DialogAddAddress from "./dialog";
 
-// ** Actions Imports
-// import { deleteUser, fetchData } from 'src/store/apps/user';
-// import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer';
-import CardStatsHorizontalWithDetails from '@core/components/card-statistics/card-stats-horizontal-with-details';
-
-// ** MUI Imports
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { styled } from '@mui/material/styles'
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 import TabPanel from '@mui/lab/TabPanel';
 import Button from '@mui/material/Button';
 import TabContext from '@mui/lab/TabContext';
 import Typography from '@mui/material/Typography';
-import { Grid, TextField } from "@mui/material";
+import { Grid } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { DataGrid } from '@mui/x-data-grid';
-import Fade from '@mui/material/Fade'
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Switch from '@mui/material/Switch'
-import Dialog from '@mui/material/Dialog'
 
-// ** Icon Imports
 import Icon from '@core/components/icon';
 import CustomAvatar from '@core/components/mui/avatar';
 
-// ** Custom Components Imports
-import CustomChip from '@core/components/mui/chip';
 import CustomTextField from '@core/components/mui/text-field';
 
 import { getInitials } from '@core/utils/get-initials';
 
-// ** Hooks
 import useBgColor from '../../hooks/useBgColor'
 import { useNavigate } from "react-router-dom";
 
 
 const TableHeader = (props) => {
-  // ** Props
   const { handleFilter, toggle, value } = props;
 
   const navigate = useNavigate();
@@ -64,7 +45,6 @@ const TableHeader = (props) => {
   }
 
   return (
-    // Tabla
     <Box
       sx={{
         py: 4,
@@ -80,9 +60,11 @@ const TableHeader = (props) => {
       <Box
         sx={{
           rowGap: 2,
+          columnGap: 2,
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
+          justifyContent: 'space-around',
         }}
       >
         <Button
@@ -93,7 +75,6 @@ const TableHeader = (props) => {
         >
           Export
         </Button>
-
         <Button
           variant="contained"
           sx={{ '& svg': { mr: 2 } }}
@@ -102,34 +83,36 @@ const TableHeader = (props) => {
           Limpiar filtros
         </Button>
       </Box>
-
-      <Box
-        sx={{
-          rowGap: 2,
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-        }}
-      >
-        <CustomTextField
-          value={value}
-          sx={{ mr: 4 }}
-          placeholder="Search User"
-          onChange={(e) => handleFilter(e.target.value)}
-        />
-
-        <Button
-          variant="contained"
-          onClick={addProd}
+      <Grid item xs={12} sm={6} md={6}>
+        <Box
+          sx={{
+            rowGap: 2,
+            columnGap: 2,
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+          }}
         >
-          <Icon fontSize="1.125rem" icon="ic:baseline-add" />
-          Añadir producto
-        </Button>
-      </Box>
+          <CustomTextField
+            value={value}
+            sx={{ mr: 4 }}
+            placeholder="Search User"
+            onChange={(e) => handleFilter(e.target.value)}
+          />
+
+          <Button
+            variant="contained"
+            onClick={addProd}
+          >
+            <Icon fontSize="1.125rem" icon="ic:baseline-add" />
+            Añadir producto
+          </Button>
+        </Box>
+      </Grid>
     </Box>
   );
 };
-
 
 const Preview = () => {
 
@@ -145,7 +128,6 @@ const Preview = () => {
   console.log(provider);
 
   const [editMode, setEditMode] = useState(null);
-  // ** renders client column
   const renderClient = (row) => {
     if (row.avatar) {
       return (
@@ -171,10 +153,6 @@ const Preview = () => {
   };
 
   const RowOptions = ({ id }) => {
-    // ** Hooks
-    //   const dispatch = useDispatch();
-
-    // ** State
     const [anchorEl, setAnchorEl] = useState(null);
     const rowOptionsOpen = Boolean(anchorEl);
 
@@ -184,11 +162,6 @@ const Preview = () => {
 
     const handleRowOptionsClose = () => {
       setAnchorEl(null);
-    };
-
-    const handleDelete = () => {
-      // dispatch(deleteUser(id));
-      handleRowOptionsClose();
     };
 
     return (
@@ -220,11 +193,12 @@ const Preview = () => {
             <Icon icon="tabler:eye" fontSize={20} />
             Ver más
           </MenuItem>
-          <MenuItem sx={{ '& svg': { mr: 2 } }}>
-            <Icon icon="tabler:edit" fontSize={20} />
-            <DialogAddAddress data={data} index={id} />
-          </MenuItem>
-          <MenuItem onClick={(e) => deleteProduct(e.target.value)} sx={{ '& svg': { mr: 2 } }}>
+          <DialogAddAddress data={data} index={id} />
+          <MenuItem
+            value={id}
+            onClick={(e) => deleteProduct(e.target.value)}
+            sx={{ '& svg': { mr: 2 } }}
+          >
             <Icon icon="tabler:trash" fontSize={20} />
             Eliminar
           </MenuItem>
@@ -233,11 +207,11 @@ const Preview = () => {
     );
   };
 
-
   const columns = [
     {
       flex: 0.25,
-      width: "fit-content",
+      minWidth: 250,
+      // width: "fit-content",
       field: 'product or service',
       headerName: 'Producto o servicio',
       display: "flex",
@@ -283,6 +257,7 @@ const Preview = () => {
     },
     {
       flex: 0.25,
+      minWidth: 280,
       width: "fit-content",
       field: 'description',
       headerName: 'Descripción',
@@ -319,6 +294,7 @@ const Preview = () => {
     },
     {
       flex: 0.25,
+      minWidth: 170,
       width: "fit-content",
       field: 'Price',
       headerName: 'Precio',
@@ -357,6 +333,7 @@ const Preview = () => {
     },
     {
       flex: 0.25,
+      minWidth: 250,
       width: "fit-content",
       field: 'provider',
       headerName: 'Proveedor',
@@ -395,7 +372,7 @@ const Preview = () => {
     },
     {
       flex: 0.1,
-      minWidth: 100,
+      minWidth: 80,
       sortable: false,
       renderCell: ({ row }) => <RowOptions id={row.id} />,
     },
@@ -415,12 +392,12 @@ const Preview = () => {
 
   //Agregar datos
   useEffect(() => {
-
     const fetchData = async () => {
 
       try {
         const collectionRef = collection(db, "new-products");
-        const querySnapshot = await getDocs(collectionRef);
+        const q = query(collectionRef, orderBy("created"));
+        const querySnapshot = await getDocs(q);
 
         const newData = [];
         querySnapshot.forEach((doc) => {
@@ -432,14 +409,12 @@ const Preview = () => {
           SetPrice(productData.price)
           SetProvider(productData.provider)
         });
-
         setData(newData);
 
       } catch (error) {
         console.error("Error al recopilar información: ", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -448,12 +423,11 @@ const Preview = () => {
   }
 
   //Eliminar datos
-  function deleteProduct(j) {
-    const deleteProd = data[j];
+  function deleteProduct(index) {
+    const deleteProd = data[index];
     const productRef = doc(db, "new-products", deleteProd.id);
 
     deleteDoc(productRef)
-
       .then(() => {
         console.log("Producto eliminado!");
       })
@@ -462,14 +436,13 @@ const Preview = () => {
       });
   }
 
-
   return (
-    <><>
-    </><Grid item xs={12}>
+    <>
+      <Grid item xs={12}>
         <Card>
           <CardHeader title="Filtrar búsqueda" />
           <CardContent>
-            <Grid container spacing={6}>
+            <Grid sx={{ display: "flex", justifyContent: "space-between" }} container spacing={6}>
               <Grid item sm={4} xs={12}>
                 <CustomTextField
                   select
@@ -517,13 +490,10 @@ const Preview = () => {
             columns={columns}
             disableRowSelectionOnClick
             pageSizeOptions={[10, 25, 50]} />
-
         </Card>
       </Grid>
     </>
-
   )
 }
-
 
 export default Preview;
