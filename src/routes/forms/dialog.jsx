@@ -177,6 +177,19 @@ const DialogAddAddress = ({ data, index }) => {
             </Grid>
           </Grid>
           <Grid sx={{ display: "flex", justifyContent: "end", mt: "20px" }}>
+            <Grid item md={6} xs={12}>
+              <DialogActions
+                sx={{ px: "0" }}
+              >
+                <Button
+                  variant="outlined"
+                  onClick={() => setShow(false)}
+                >
+                  Cancelar
+                </Button>
+              </DialogActions>
+            </Grid>
+
             <Grid item md={6} xs={12}
             >
               <DialogActions
@@ -187,19 +200,6 @@ const DialogAddAddress = ({ data, index }) => {
                   variant="contained"
                 >
                   Editar
-                </Button>
-              </DialogActions>
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <DialogActions
-                sx={{ px: "0" }}
-              >
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => setShow(false)}
-                >
-                  Cancelar
                 </Button>
               </DialogActions>
             </Grid>
